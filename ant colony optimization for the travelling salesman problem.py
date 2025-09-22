@@ -23,7 +23,7 @@ class AntColony:
             shortest_path = min(all_paths, key=lambda x: x[1])
             if shortest_path[1] < all_time_shortest_path[1]:
                 all_time_shortest_path = shortest_path            
-            self.pheromone *=(1 - self.decay)
+            self.pheromone *= (1 - self.decay)
         return all_time_shortest_path
 
     def spread_pheromone(self, all_paths, n_best, shortest_path):
@@ -67,7 +67,8 @@ class AntColony:
         move = np.random.choice(self.all_inds, 1, p=norm_row)[0]
         return move
 
-# Example distance matrix
+
+# Distance matrix (example with 5 cities)
 distances = np.array([
     [np.inf, 2, 2, 5, 7],
     [2, np.inf, 4, 8, 2],
@@ -76,6 +77,12 @@ distances = np.array([
     [7, 2, 3, 2, np.inf]
 ])
 
+# Initialize and run ACO
 aco = AntColony(distances, n_ants=10, n_best=5, n_iterations=100, decay=0.1, alpha=1, beta=2)
 shortest_path = aco.run()
-print("Best path found:", shortest_path)
+
+# Unpack and print the result nicely
+path, distance = shortest_path
+node_sequence = [path[0][0]] + [step[1] for step in path]
+print("Best path found: ", " -> ".join(map(str, node_sequence)))
+print(f"Total distance: {distance:.2f}")
